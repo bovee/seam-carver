@@ -149,6 +149,21 @@ def find_seam(paths, end_x):
     return seam
 
 
+def average_seam(img, seam):
+    """Given a seam and an image, return the average of the seam with its left
+    and right neighbors
+    :img
+        3-D numpy array representing the RGB image you want to resize
+    :seam
+        1-D numpy array of the seam to duplciate via averaging
+    """
+    avg = np.zeros(len(seam))
+    for row,col in enumerate(seam):
+        print img[row][col-1:col+2]
+        avg[row] = np.mean(img[row][col-1:col+2])
+    return avg
+
+
 def remove_seam(img, seam):
     """
     :img

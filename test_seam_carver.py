@@ -7,7 +7,8 @@ from seam_carver import (
     neighbors,
     cumulative_energy,
     find_seam,
-    remove_seam
+    remove_seam,
+    average_seam
 )
 from energy_functions import (
     dual_gradient_energy
@@ -49,6 +50,18 @@ class UtilsTestCase(unittest.TestCase):
             [1., 4., 3., 5., 2.],
             [3., 2., 5., 2., 3.],
             [5., 2., 4., 2., 1.]
+        ])
+
+        self.img_3_avg_seam = np.array([
+            8./3., 10./3., 8./3.
+        ])
+
+        self.img_3_avg_seam_right = np.array([
+            3.5, 2.5, 7./3.
+        ])
+
+        self.img_3_avg_seam_left = np.array([
+            8./3., 2.5, 3.5
         ])
 
         self.img_3_paths = np.array([
@@ -129,6 +142,24 @@ class UtilsTestCase(unittest.TestCase):
 
         h, w = new_shape_for_ratio(im, 215, 851)
         assert(abs(float(h)/w - 215/851.0) < 0.001)
+
+    def test_average_seam(self):
+        seam = [1., 1., 2.]
+        img = self.img_3
+        avg_seam = average_seam(img, seam)
+        assert_array_equal(avg_seam, self.img_3_avg_seam)
+
+    def test_average_seam_right_edge(self):
+        seam = [4., 4., 3.]
+        img = self.img_3
+        avg_seam = average_seam(img, seam)
+        assert_array_equal(avg_seam, self.img_3_avg_seam_right)
+
+    def test_average_seam_left_edge(self):
+        seam = [1., 0., 0.]
+        img = self.img_3
+        avg_seam = average_seam(img, seam)
+        assert_array_equal(avg_seam, self.img_3_avg_seam_left)
 
 
 if __name__ == "__main__":
